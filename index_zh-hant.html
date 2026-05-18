@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>hop on JB 需求規格 — hop-JB-REQ-001</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --brand:#1a9398;--brand-dark:#116d71;--brand-light:#e6f6f7;--brand-mid:#2bb5bb;
+  --ink:#0f1117;--ink-mid:#2d3142;--ink-light:#6b7280;--bg:#f4f6f7;--bg-card:#ffffff;--border:#dde3e4;
+  --red:#c0392b;--amber:#b45309;--amber-bg:#fef3c7;--sans:'Noto Sans JP',sans-serif;--mono:'DM Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:16px;line-height:1.8}
+.site-header{
+  position:sticky;top:0;z-index:10;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);padding:10px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+.site-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-weight:700}
+.site-brand img{height:28px;width:auto;display:block}
+.lang-switch{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.lang-switch a{
+  font-family:var(--mono);font-size:12px;text-decoration:none;color:var(--ink-light);border:1px solid var(--border);
+  border-radius:999px;padding:4px 9px;background:#fff;line-height:1.4;
+}
+.lang-switch a:hover,.lang-switch a.active{color:#fff;background:var(--brand);border-color:var(--brand)}
+.cover{background:#fff;min-height:calc(100vh - 50px);display:flex;flex-direction:column;border-bottom:4px solid var(--brand)}
+.cover-top{padding:48px 56px 0;display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.cover-logo img{height:56px;width:auto;display:block;max-width:240px}
+.cover-logo .fallback{display:none;font-size:34px;font-weight:700;letter-spacing:-.05em;color:#000}
+.cover-docid{font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--ink-light);text-align:right;line-height:1.7;flex-shrink:0}
+.cover-body{padding:40px 56px;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cover-to-label,.cover-title-label{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase}
+.cover-to-label{color:var(--brand);margin-bottom:6px}
+.cover-title-label{color:var(--ink-light);margin-bottom:14px}
+.cover-to-name{font-size:17px;font-weight:500;color:var(--ink-mid);margin-bottom:48px;padding-bottom:28px;border-bottom:1px solid var(--border)}
+.cover-title{font-size:clamp(24px,4.5vw,44px);font-weight:700;line-height:1.2;letter-spacing:-.01em;margin-bottom:10px;word-break:keep-all;overflow-wrap:break-word}
+.cover-title span{color:var(--brand)}
+.cover-sub{font-size:15px;color:var(--ink-light);margin-bottom:48px}
+.cover-meta-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:20px;padding-top:28px;border-top:1px solid var(--border)}
+.cover-meta-item{display:flex;flex-direction:column;gap:4px}
+.cover-meta-label{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-light)}
+.cover-meta-value{font-size:15px;font-weight:600;color:var(--ink)}
+.cover-bottom{padding:20px 56px;border-top:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.cover-brand-bar{width:36px;height:3px;background:var(--brand);border-radius:2px;flex-shrink:0}
+.cover-confidential{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--ink-light)}
+.container{max-width:900px;margin:0 auto;padding:56px 40px 96px}
+.toc{background:var(--bg-card);border:1px solid var(--border);border-left:4px solid var(--brand);padding:32px 36px;margin-bottom:64px;border-radius:0 8px 8px 0}
+.toc-title{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--brand);margin-bottom:20px}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:10px}
+.toc-list a{text-decoration:none;color:var(--ink-mid);font-size:16px;display:flex;align-items:baseline;gap:14px}
+.toc-list a:hover{color:var(--brand)}
+.toc-num{font-family:var(--mono);font-size:13px;color:var(--brand);min-width:28px;font-weight:500;flex-shrink:0}
+.section{margin-bottom:72px}
+.section-header{display:flex;align-items:center;gap:20px;margin-bottom:28px;padding-bottom:16px;border-bottom:2px solid var(--brand-light)}
+.section-num{font-family:var(--mono);font-size:36px;font-weight:700;color:var(--brand);line-height:1;min-width:60px;flex-shrink:0}
+.section-title{font-size:22px;font-weight:700;color:var(--ink);letter-spacing:-.01em}
+.subsection{margin-bottom:36px}
+.subsection-title{font-size:17px;font-weight:700;color:var(--ink-mid);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.subsection-title:before{content:'';display:block;width:4px;height:18px;background:var(--brand);border-radius:2px;flex-shrink:0}
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:16px}
+.lead{font-size:15px;color:var(--ink-mid);line-height:1.85}
+.spec-list{list-style:none;display:flex;flex-direction:column;gap:10px}
+.spec-list li{display:grid;grid-template-columns:18px 1fr;gap:14px;font-size:15px;color:var(--ink-mid);line-height:1.75}
+.spec-list li:before{content:'—';color:var(--brand);font-family:var(--mono);margin-top:2px}
+.table-wrap{overflow-x:auto;margin-bottom:16px;border-radius:8px;border:1px solid var(--border);-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;background:var(--bg-card);table-layout:auto}
+thead tr{background:var(--brand);color:#fff}
+thead th{padding:13px 14px;text-align:left;font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;vertical-align:middle}
+tbody tr{border-bottom:1px solid var(--border);transition:background .1s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:#f0fafa}
+tbody tr:nth-child(even){background:#f7fbfb}
+tbody tr:nth-child(even):hover{background:#e8f5f5}
+td{padding:12px 14px;color:var(--ink-mid);vertical-align:middle;line-height:1.6;font-size:14px;word-break:break-word;overflow-wrap:break-word}
+td:first-child{font-weight:600;color:var(--ink)}
+.td-mono{font-family:var(--mono);font-size:13px;color:var(--brand-dark);font-weight:500;white-space:nowrap}
+.badge{display:inline-block;font-family:var(--mono);font-size:11px;padding:3px 8px;border-radius:4px;font-weight:500;white-space:nowrap}
+.badge-confirm{background:var(--amber-bg);color:var(--amber)}
+.badge-fuse{background:var(--brand-light);color:var(--brand-dark)}
+.schedule-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;margin-bottom:16px}
+.schedule-card{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:20px}
+.schedule-card.phase-sample{border-top:4px solid var(--brand)}
+.schedule-card.phase-mass{border-top:4px solid var(--red)}
+.schedule-phase{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-light);margin-bottom:6px}
+.schedule-name{font-weight:700;font-size:16px;color:var(--ink);margin-bottom:8px}
+.schedule-date{font-family:var(--mono);font-size:13px;color:var(--brand);font-weight:500;margin-bottom:8px}
+.schedule-note{font-size:13px;color:var(--ink-light);line-height:1.65}
+.notice{background:var(--brand-light);border:1px solid #a8d8da;border-left:4px solid var(--brand);border-radius:0 8px 8px 0;padding:14px 18px;font-size:15px;color:var(--brand-dark);margin-bottom:16px;line-height:1.75}
+.doc-footer{background:var(--ink);color:rgba(255,255,255,.35);text-align:center;padding:24px 20px;font-family:var(--mono);font-size:11px;letter-spacing:.07em}
+p,li,td,th,.cover-to-name,.cover-title,.cover-sub{overflow-wrap:anywhere}
+.section-title,.subsection-title,.schedule-name{line-break:strict}
+.table-wrap:after{content:attr(data-scroll);display:none;font-size:11px;color:var(--ink-light);padding:6px 10px;background:#fff}
+@media(max-width:600px){
+  .site-header{padding:8px 14px;align-items:flex-start}.site-brand img{height:22px}.lang-switch a{font-size:11px;padding:3px 7px}
+  .cover-top{padding:24px 20px 0;flex-direction:column;align-items:flex-start;gap:12px}.cover-logo img{height:36px}.cover-docid{font-size:10px;text-align:left}
+  .cover-body{padding:28px 20px 20px}.cover-to-name{font-size:14px;margin-bottom:32px;padding-bottom:20px}.cover-title{font-size:24px}.cover-sub{font-size:13px;margin-bottom:32px}
+  .cover-meta-grid{grid-template-columns:1fr 1fr;gap:14px;padding-top:20px}.cover-meta-value{font-size:14px}.cover-bottom{padding:16px 20px}
+  .container{padding:32px 16px 64px}.toc{padding:20px 16px;margin-bottom:40px}.toc-list a{font-size:14px}.section-header{gap:12px}
+  .section-num{font-size:26px;min-width:38px}.section-title{font-size:18px}.subsection-title{font-size:15px}.spec-list li{font-size:14px}
+  .schedule-grid{grid-template-columns:1fr 1fr}.card{padding:16px}thead th{font-size:10px;padding:10px}td{font-size:13px;padding:10px}
+  .table-wrap:after{display:block}table{min-width:720px}.cover{min-height:auto}
+}
+@media(max-width:400px){.schedule-grid{grid-template-columns:1fr}.cover-meta-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a class="site-brand" href="./index_zh-hant.html"><img src="./mainlogo_backclear.png" alt="hop on" onerror="this.style.display='none'"><span>JB 需求規格</span></a>
+  <nav class="lang-switch" aria-label="Language switcher"><a  href='./index.html'>JP</a><a  href='./index_en.html'>EN</a><a class="active" href='./index_zh-hant.html'>繁體</a><a  href='./index_zh-hans.html'>简体</a></nav>
+</header>
+<div class="cover">
+  <div class="cover-top">
+    <div class="cover-logo"><img src="./mainlogo_backclear.png" alt="hop on" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><div class="fallback"><span style="color:#1a9398">.</span>hop on</div></div>
+    <div class="cover-docid">hop-JB-REQ-001<br>Rev. 1.0</div>
+  </div>
+  <div class="cover-body">
+    <div class="cover-to-label">To</div><div class="cover-to-name">PICLITE ENTERPRISE CORP.（學文企業有限公司）</div>
+    <div class="cover-title-label">Document</div><div class="cover-title">hop on 下一代試作車輛用<br><span>JB 需求規格</span></div><div class="cover-sub">Junction Block Requirements Specification</div>
+    <div class="cover-meta-grid">
+      <div class="cover-meta-item"><span class="cover-meta-label">發行者</span><span class="cover-meta-value">hop on Inc.</span></div>
+      <div class="cover-meta-item"><span class="cover-meta-label">製作者</span><span class="cover-meta-value">Hiroaki Nakajima</span></div>
+      <div class="cover-meta-item"><span class="cover-meta-label">製作日期</span><span class="cover-meta-value">2026年05月18日</span></div>
+      <div class="cover-meta-item"><span class="cover-meta-label">版本</span><span class="cover-meta-value">Rev. 1.0</span></div>
+    </div>
+  </div>
+  <div class="cover-bottom"><div class="cover-brand-bar"></div><div class="cover-confidential">CONFIDENTIAL — 本文件包含 hop on Inc. 之機密資訊</div></div>
+</div>
+<div class="container">
+  <div class="toc"><div class="toc-title">目錄 / Contents</div><ul class="toc-list"><li><a href='#s1'><span class='toc-num'>01</span>概要</a></li><li><a href='#s2'><span class='toc-num'>02</span>報價前提與訂購時程</a></li><li><a href='#s3'><span class='toc-num'>03</span>系統前提條件</a></li><li><a href='#s4'><span class='toc-num'>04</span>保險絲配置</a></li><li><a href='#s5'><span class='toc-num'>05</span>零件配置（Minimum / Full）</a></li><li><a href='#s6'><span class='toc-num'>06</span>各零件選型要求</a></li><li><a href='#s7'><span class='toc-num'>07</span>電氣規格與各端子電流規格</a></li><li><a href='#s8'><span class='toc-num'>08</span>搭載環境與耐環境性能</a></li><li><a href='#s9'><span class='toc-num'>09</span>PCB 設計要求</a></li><li><a href='#s10'><span class='toc-num'>10</span>與車輛側連接規格・服務端子</a></li><li><a href='#s11'><span class='toc-num'>11</span>關於附件電路圖</a></li></ul></div>
+  <section class="section" id="s1"><div class="section-header"><span class="section-num">01</span><h2 class="section-title">概要</h2></div><div class="card"><p class="lead">本文件定義 hop on 下一代試作車輛用接線盒（JB）之 PCB 及周邊電路需求規格。請將本文件作為 PCB 製造商及 JB 供應商 PICLITE ENTERPRISE CORP. 的設計委託資料使用。</p></div></section>
+  <section class="section" id="s2"><div class="section-header"><span class="section-num">02</span><h2 class="section-title">報價前提與訂購時程</h2></div><div class="subsection"><div class="subsection-title">報價前提</div><div class="card"><ul class='spec-list'><li><span>目前計畫中的年度訂購數量預計為 <strong>100 台</strong>。</span></li><li><span>請依據本需求規格書及附件電路圖，提供：①量產品單價（以年度100台批量為基準）②樣品單價（初次試作・評估用少量訂購）。</span></li><li><span>本次報價以 <strong>Full 規格優先</strong>。若透過縮小基板尺寸等方式可望降低成本，Minimum 規格可於後續另行檢討。</span></li></ul></div></div><div class="subsection"><div class="subsection-title">訂購時程與計畫（2025年度計畫）</div><div class="schedule-grid"><div class='schedule-card phase-sample'><div class='schedule-phase'>Sample — 1st</div><div class='schedule-name'>第一次樣品</div><div class='schedule-date'>希望 6 月交付</div><div class='schedule-note'>收到報價後將儘速下單。目的為搭載於 ver.2.0 試作車輛，並確認電路及安裝的基本動作。</div></div><div class='schedule-card phase-sample'><div class='schedule-phase'>Sample — 2nd</div><div class='schedule-name'>第二次樣品</div><div class='schedule-date'>預計 7〜8 月下單・交付</div><div class='schedule-note'>供試作車輛 ver.3.0 搭載，確認與車輛之安裝適配性。</div></div><div class='schedule-card phase-sample'><div class='schedule-phase'>Sample — 3rd</div><div class='schedule-name'>第三次樣品</div><div class='schedule-date'>預計 10 月下單・交付</div><div class='schedule-note'>量產相當品。目的為確認量產流程與品質水準。</div></div><div class='schedule-card phase-mass'><div class='schedule-phase'>Mass Production</div><div class='schedule-name'>正式訂購・量產</div><div class='schedule-date'>12 月簽約 / 次年 1〜2 月交付</div><div class='schedule-note'>目標為 3 月以後開始上市。</div></div></div></div></section>
+  <section class="section" id="s3"><div class="section-header"><span class="section-num">03</span><h2 class="section-title">系統前提條件</h2></div><div class='subsection'><div class='subsection-title'>電源配置</div><div class='card'><ul class='spec-list'><li><span>主電源為 72V LiFePO4 電池（工作電壓範圍：60〜85V）。</span></li><li><span>由 DCDC 轉換器將 72V 降壓至 13〜14V。輸出 50〜100W（未來可能擴充至 200W）。</span></li><li><span>DCDC 轉換器為 72V_IN / GND / 12V_OUT / GND 的 4 端子簡易型，無 ENABLE・PGOOD 端子。</span></li></ul></div></div><div class='subsection'><div class='subsection-title'>本 JB 的電力規模</div><div class='card'><ul class='spec-list'><li><span>本 JB 不包含馬達控制及電池主電源相關的大功率電路。</span></li><li><span>若追加 USB 充電器、點菸器插座等選配電裝品，耗電電流可能增加，設計時需考慮電流裕度。</span></li></ul></div></div><div class='subsection'><div class='subsection-title'>燈具負載規格</div><div class='card'><ul class='spec-list'><li><span>設計以前提為 LED 負載。不建議改用燈絲燈泡，如需使用則由使用者自行承擔責任。</span></li><li><span>使用燈絲燈泡時的突入電流耐受性不屬於 JB 保固範圍。</span></li></ul></div></div></section>
+  <section class="section" id="s4"><div class="section-header"><span class="section-num">04</span><h2 class="section-title">保險絲配置</h2></div><div class="notice">採用保險絲預計為 mini blade fuse；但若從成本、尺寸或佈局角度更有利，也可採用低背 micro blade fuse。</div><div class='table-wrap' data-scroll='可左右滑動查看表格'><table><thead><tr><th>保險絲</th><th>額定（參考）</th><th>種類</th><th>保護對象</th></tr></thead><tbody><tr><td>F1</td><td>72V Main / 約2A</td><td><span class='badge badge-fuse'>Mini 或低背 Micro</span></td><td>DCDC 轉換器輸入・高壓系統整體</td></tr><tr><td>F2</td><td>12V Main / 約9A</td><td><span class='badge badge-fuse'>Mini 或低背 Micro</span></td><td>DCDC 輸出後・12V 主線</td></tr><tr><td>F3</td><td>+B Lamp / 約2A</td><td><span class='badge badge-fuse'>Mini 或低背 Micro</span></td><td>Hazard・Brake・Turn signal（常時電源）</td></tr><tr><td>F4</td><td>Lamp IG / 約5A</td><td><span class='badge badge-fuse'>Mini 或低背 Micro</span></td><td>Headlight・Reverse・Tail・Small（IG 連動）</td></tr><tr><td>F5</td><td>Signal / 約2A</td><td><span class='badge badge-fuse'>Mini 或低背 Micro</span></td><td>IG 訊號・儀表電源・控制系統</td></tr></tbody></table></div></section>
+  <section class="section" id="s5"><div class="section-header"><span class="section-num">05</span><h2 class="section-title">零件配置（Minimum / Full）</h2></div><div class="notice">本次報價以 Full 規格優先。若透過縮小基板尺寸等方式可望降低成本，Minimum 規格可於後續另行檢討。</div><div class='table-wrap' data-scroll='可左右滑動查看表格'><table><thead><tr><th>零件</th><th>區分</th><th>Minimum</th><th>Full</th><th>備註</th></tr></thead><tbody><tr><td>保險絲</td><td>必須</td><td>5</td><td>5</td><td>F1〜F5，Mini 或低背 Micro</td></tr><tr><td>備用保險絲</td><td>備用</td><td>1</td><td>3</td><td>附可焊接 through-hole pad</td></tr><tr><td>閃光繼電器</td><td>—</td><td>1個</td><td>1個</td><td>Universal 固定頻率型・不受負載影響</td></tr><tr><td>IG 繼電器</td><td>—</td><td>1</td><td>1</td><td>12V 車規等級（μISO 或同等）</td></tr><tr><td>頭燈繼電器</td><td>—</td><td>0</td><td>1</td><td>可與 IG 繼電器同等品</td></tr><tr><td>逆流防止 / 電位差穩定二極體</td><td>必須</td><td>3</td><td>3</td><td>Schottky 型（Hazard 系×2，FET 上游×1）</td></tr><tr><td>備用二極體</td><td>備用</td><td>0</td><td>1</td><td>DNP・僅 through-hole pad</td></tr><tr><td>FET</td><td>必須</td><td>1</td><td>1</td><td>Nch MOSFET・請依另行規格選型</td></tr><tr><td>備用 FET</td><td>備用</td><td>0</td><td>1</td><td>DNP・僅 through-hole pad</td></tr><tr><td>服務端子</td><td>—</td><td>0</td><td>1</td><td>LED 規格時僅 pattern / through-hole</td></tr></tbody></table></div></section>
+  <section class="section" id="s6"><div class="section-header"><span class="section-num">06</span><h2 class="section-title">各零件選型要求</h2></div><div class='subsection'><div class='subsection-title'>IG 繼電器</div><div class='card'><ul class='spec-list'><li><span>請選用一般 12V 車規等級（μISO 或同等規格）。</span></li><li><span>線圈驅動電源為 12V 系統。接點容量需對 IG 連動負載總電流保有足夠裕度。</span></li></ul></div></div><div class='subsection'><div class='subsection-title'>頭燈繼電器（僅 Full 規格）</div><div class='card'><ul class='spec-list'><li><span>請選用與 IG 繼電器同等之零件。</span></li><li><span>把手開關（LightSW）僅控制繼電器線圈，避免電流直接流入開關接點。</span></li><li><span>需與 IG 連動系統（LightSW ON 位置）連動。</span></li></ul></div></div><div class='subsection'><div class='subsection-title'>閃光繼電器</div><div class='card'><ul class='spec-list'><li><span>採用不受連接負載影響的 Universal 固定頻率型。</span></li><li><span>需滿足 JASO D619（60〜120 次/分鐘）。</span></li><li><span>不可使用電流感測式（燈泡斷線檢出式），因其與二極體並聯分支電路相容性不佳。</span></li><li><span>若有其他可降低成本之方式，請另行提案。</span></li></ul></div></div><div class='subsection'><div class='subsection-title'>方向燈 IG 連動控制用 FET</div><div class='card'><ul class='spec-list'><li><span>使用 Nch MOSFET。</span></li><li><span>Drain：閃光繼電器輸出（+B 主線）側；Source：Turn SW / LED 側；Gate：IG 繼電器接點下游。</span></li><li><span>配置 Gate resistor（Rg）及 Gate-Source resistor（Rgs）。常數另行提供。</span></li><li><span>Source 下游配置逆流防止・Vf 電位差調整用 Schottky diode（D_iso）。請使用與 Hazard 系二極體相同型號。</span></li><li><span>具體元件請依下述推定規格由貴司選型。若選型或實裝困難，請另行聯絡。</span></li></ul></div></div><div class='subsection'><div class='subsection-title'>通電電流假設</div><p class='lead'>此半導體繼電器（MOSFET）用於電動移動載具之方向燈及警示燈電路，作為「點火連動切斷用」。請參考下列推定規格進行零件選型與提案。</p><div class='table-wrap' data-scroll='可左右滑動查看表格'><table><thead><tr><th>參數</th><th>推定值・要求</th><th>補充</th></tr></thead><tbody><tr><td>工作電流（方向燈）</td><td>10W × 2燈 = 20W<br>穩態約1.67A</td><td>LED 負載前提</td></tr><tr><td>V<sub>DSS</sub>（Drain-Source 耐壓）</td><td>40V〜60V</td><td>雖為 12V 系統，仍需保留裕度</td></tr><tr><td>I<sub>D</sub>（連續 Drain 電流）</td><td>30A〜50A 以上</td><td>相對穩態 1.67A 保留足夠裕度</td></tr><tr><td>R<sub>DS(on)</sub>（導通電阻）</td><td>20mΩ 以下<br>（建議：約10mΩ）</td><td>為降低與 Hazard 系二極體 Vf 造成之亮度差，建議低電阻品</td></tr><tr><td>V<sub>GS(th)</sub>（Gate 閾值電壓）</td><td>Logic-level 驅動品<br>（V<sub>GS</sub> = 4.5V 時完全 ON）</td><td>以 IG 繼電器接點輸出（12V 系）確實 ON</td></tr></tbody></table></div></div><div class='subsection'><div class='subsection-title'>逆流防止二極體</div><div class='card'><ul class='spec-list'><li><span>請使用 Schottky 型（二極體：Hazard L/R 各1個、FET 上游 D_iso 1個，共3個）。</span></li><li><span>考慮燈絲燈泡客製，左右單側需確保約 24W 程度之耐受能力。</span></li><li><span>Hazard 系與方向燈系使用同型品，使 Vf 差異造成的亮度差最小化。</span></li></ul></div></div></section>
+  <section class="section" id="s7"><div class="section-header"><span class="section-num">07</span><h2 class="section-title">電氣規格與各端子電流規格</h2></div><div class="subsection"><div class="subsection-title">電氣規格</div><div class='table-wrap' data-scroll='可左右滑動查看表格'><table><thead><tr><th>項目</th><th>規格・推定值</th><th>備註</th></tr></thead><tbody><tr><td>輸入電壓（高壓系）</td><td>60〜85V DC</td><td>LiFePO4 72V 額定</td></tr><tr><td>輸入電壓（低壓系）</td><td>13〜14V DC</td><td>DCDC 輸出</td></tr><tr><td>DCDC 輸入電流</td><td>例）100W ÷ 72V ÷ 0.85 ≒ 1.6A</td><td>依 72V 側 F1 額定而定</td></tr><tr><td>12V 系最大輸出電流</td><td>約9A</td><td>以 F2 額定為基準</td></tr><tr><td>+B 系（常時）最大電流</td><td>約2A</td><td>以 F3 額定為基準</td></tr><tr><td>IG 連動系最大電流</td><td>約5A</td><td>以 F4 額定為基準</td></tr><tr><td>控制・訊號系最大電流</td><td>約2A</td><td>以 F5 額定為基準</td></tr><tr><td>耗電功率（標準裝備・LED）</td><td><span class='badge badge-confirm'>需確認</span></td><td>燈具 LED 化前提</td></tr><tr><td>耗電功率（最大・含選配）</td><td>〜200W</td><td>以 DCDC 最大輸出為基準</td></tr></tbody></table></div></div><div class="subsection"><div class="subsection-title">各端子電流規格・保險絲選定</div><div class='table-wrap' data-scroll='可左右滑動查看表格'><table><thead><tr><th>端子／系統</th><th>對象負載</th><th>推定穩態電流</th><th>推定最大電流</th><th>安全率</th><th>搭載保險絲</th><th>種類</th></tr></thead><tbody><tr><td>F1 72V Main</td><td>DCDC 轉換器輸入</td><td>約1.6A（100W 前提）</td><td>約1.6A（100W 前提）</td><td>×2.0</td><td><span class='badge badge-confirm'>需確認</span></td><td><span class='badge badge-fuse'>Mini/低背</span></td></tr><tr><td>F2 12V Main</td><td>12V 系全部負載</td><td>約7A</td><td>約9A</td><td>×1.5</td><td>10〜15A</td><td><span class='badge badge-fuse'>Mini/低背</span></td></tr><tr><td>F3 +B Lamp</td><td>Hazard・Brake・Turn signal</td><td>約1A</td><td>約2A</td><td>×2.0</td><td>3〜5A</td><td><span class='badge badge-fuse'>Mini/低背</span></td></tr><tr><td>F4 Lamp IG</td><td>Headlight・Tail・Small・Reverse</td><td>約3〜4A</td><td>約5A</td><td>×1.5</td><td>7.5〜10A</td><td><span class='badge badge-fuse'>Mini/低背</span></td></tr><tr><td>F5 Signal</td><td>Meter・Controller IG・Control system</td><td>約1A</td><td>約2A</td><td>×2.0</td><td>3〜5A</td><td><span class='badge badge-fuse'>Mini/低背</span></td></tr></tbody></table></div><div class="notice">F1 電流值將於 DCDC 輸出功率確定後更新。計算式：輸出功率 ÷ 輸入電壓 ÷ DCDC 效率（推定 0.85）。</div></div></section>
+  <section class="section" id="s8"><div class="section-header"><span class="section-num">08</span><h2 class="section-title">搭載環境與耐環境性能</h2></div><div class='table-wrap' data-scroll='可左右滑動查看表格'><table><thead><tr><th>項目</th><th>規格・推定值</th><th>備註</th></tr></thead><tbody><tr><td>搭載車輛</td><td>電動三輪車／小型移動載具</td><td>hop on 下一代試作車輛</td></tr><tr><td>搭載位置</td><td>前座下方 BOX 內</td><td>不會直接受雨淋，但可能有滴水</td></tr><tr><td>使用環境溫度</td><td>-30〜+50℃</td><td>主要銷售於島嶼地區。暫無 0℃ 以下寒冷地銷售計畫。上限為夏季最高溫度＋日射升溫之推定值</td></tr><tr><td>保存溫度</td><td>依使用環境溫度</td><td>同上</td></tr><tr><td>耐濕性</td><td>相當於一般 JB・保險絲盒</td><td>無特別防水等級指定</td></tr><tr><td>耐振動</td><td>相當於車規等級</td><td>建議符合 JASO 規格。若成本影響較大，可依貴司標準規格對應</td></tr><tr><td>Conformal coating</td><td><span class='badge badge-confirm'>需報價</span></td><td>請提供有 coating / 無 coating 兩種價格</td></tr><tr><td>PCB 固定方式</td><td>依貴司標準規格提案</td><td>螺絲固定・壓入等</td></tr><tr><td>外形尺寸（JB 本體）</td><td>依貴司標準規格提案</td><td>在滿足我司要求範圍內最佳化</td></tr><tr><td>重量</td><td>依貴司標準規格提案</td><td>無特別目標值</td></tr></tbody></table></div></section>
+  <section class="section" id="s9"><div class="section-header"><span class="section-num">09</span><h2 class="section-title">PCB 設計要求</h2></div><div class="card"><ul class='spec-list'><li><span>各元件及電源路徑前後需設置電壓量測用 test pad。</span></li><li><span>備用保險絲及備用二極體電路兩端需設置可焊接之 through-hole pad。</span></li><li><span>DNP 零件僅實裝 pattern，需可支援後工程實裝。</span></li><li><span>若因 PCB pattern 條件，修改我司要求規格可明顯改善成本或製造性（例：減少備用保險絲數量以縮小基板面積），請積極提案。</span></li><li><span>設計溫度範圍：-30〜+50℃（依使用環境溫度）。</span></li></ul></div></section>
+  <section class="section" id="s10"><div class="section-header"><span class="section-num">10</span><h2 class="section-title">與車輛側連接規格・服務端子</h2></div><div class='subsection'><div class='subsection-title'>與車輛側連接規格</div><div class='card'><ul class='spec-list'><li><span>電路圖中的 connector symbol 僅表示連接方式，不代表必須採用 connector。</span></li><li><span>請提案貴司可對應的連接方案，例如端子台、Faston 端子、電線直結等，最終規格將另行協議確定。</span></li></ul></div></div><div class='subsection'><div class='subsection-title'>服務端子（External Battery Terminal）</div><div class='card'><ul class='spec-list'><li><span>此為選配端子，用於連接小型鉛酸電池（如機車用電池等），作為使用燈絲燈泡時的電壓變動對策。</span></li><li><span>標準規格（LED）中保持未使用。若為 through-hole 可保持原狀；若為端子台，希望僅實裝可後加工之 pad。</span></li><li><span>連接電池將由 DCDC 轉換器輸出電壓（13〜14V）自然充電，不需要主動充電控制電路。</span></li></ul></div></div></section>
+  <section class="section" id="s11"><div class="section-header"><span class="section-num">11</span><h2 class="section-title">關於附件電路圖</h2></div><div class="card"><ul class='spec-list'><li><span>電路圖中央縱線左側為表示車輛側負載及外部開關類的參考圖。JB 本體設計對象範圍為縱線右側。</span></li><li><span>如有不明之處，請另行聯絡。</span></li></ul></div></section>
+</div>
+<footer class="doc-footer">本文件包含 hop on Inc. 之機密資訊。未經授權禁止轉載、複製或散布。 | hop-JB-REQ-001 Rev.1.0</footer>
+<script>
+document.querySelectorAll('.table-wrap').forEach(el => el.setAttribute('data-scroll', '可左右滑動查看表格'));
+</script>
+</body>
+</html>
